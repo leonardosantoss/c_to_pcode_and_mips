@@ -52,12 +52,13 @@ extern char* yytext;
 extern FILE* yyin;
 extern void yyerror(const char* msg);
 CmdList* root;
+Expr* root0;
 BoolExpr* root1;
 Attrib* root2;
 While* root3;
 
 
-#line 61 "parser.h" /* yacc.c:1919  */
+#line 62 "parser.h" /* yacc.c:1919  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -130,7 +131,7 @@ union YYSTYPE
   If* ifValue;
   Else* elseValue;
 
-#line 134 "parser.h" /* yacc.c:1919  */
+#line 135 "parser.h" /* yacc.c:1919  */
 };
 
 typedef union YYSTYPE YYSTYPE;

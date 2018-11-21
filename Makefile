@@ -1,6 +1,5 @@
-
-OBJS=scanner.o parser.o ast.o interpreter.o
-INTERM=scanner.c parser.c parser.h 
+OBJS=scanner.o parser.o ast.o interpreter.o stack.o compiler.o
+INTERM=scanner.c parser.c parser.h
 PROGRAM=./interpreter
 CFLAGS=-g 
 

@@ -105,6 +105,7 @@ extern char* yytext;
 extern FILE* yyin;
 extern void yyerror(const char* msg);
 CmdList* root;
+Expr* root0;
 BoolExpr* root1;
 Attrib* root2;
 While* root3;
@@ -115,8 +116,8 @@ While* root3;
 
 
 program:
-  T_INT T_MAIN T_OPENPARENTESES T_CLOSEPARENTESES T_OPENCURLYBRACKET cmdList T_CLOSECURLYBRACKET
-  { root = $6; }
+  T_INT T_MAIN T_OPENPARENTESES T_CLOSEPARENTESES T_OPENCURLYBRACKET expr T_CLOSECURLYBRACKET
+  { root0 = $6; }
 ;
 
 cmdList:

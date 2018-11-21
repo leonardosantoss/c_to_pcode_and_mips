@@ -259,7 +259,7 @@ void printCmdList(CmdList* root, int nSpaces){
       printCmd(root->Cmd, nSpaces);
     }
 }
-
+/*
 int main(int argc, char** argv) {
   --argc; ++argv;
   if (argc != 0) {
@@ -289,3 +289,4 @@ int main(int argc, char** argv) {
 
 
 }
+*/
