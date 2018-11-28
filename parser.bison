@@ -109,15 +109,16 @@ Expr* root0;
 BoolExpr* root1;
 Attrib* root2;
 While* root3;
-
+Scanf* root4;
+Printf* root5;
 }
 
 %%
 
 
 program:
-  T_INT T_MAIN T_OPENPARENTESES T_CLOSEPARENTESES T_OPENCURLYBRACKET expr T_CLOSECURLYBRACKET
-  { root0 = $6; }
+  T_INT T_MAIN T_OPENPARENTESES T_CLOSEPARENTESES T_OPENCURLYBRACKET printf T_CLOSECURLYBRACKET
+  { root5 = $6; }
 ;
 
 cmdList:

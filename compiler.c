@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "parser.h"
 #include "stack.h"
+#include "ast.h"
 
-void printInstr(Instr* instr){
+void printInstrExpr(Instr* instr){
     switch(instr->type){
       case E_LDC:
         printf("ldc %d\n", instr->attr.value);
@@ -21,15 +22,58 @@ void printInstr(Instr* instr){
     }
 }
 
-void printInstrList(InstrList* root){
+void printInstrScanf(Instr* instr)
+{
+  switch(instr->type)
+  {
+    case E_LDA:
+      printf("lda %s\n", instr->attr.name);
+      break;
+    case E_RDI:
+      printf("rdi\n");
+      break;
+    default:
+      break;
+  }
+}
+
+void printInstrPrintf(Instr* instr){
+  switch(instr->type){
+    case E_WRI:
+      printf("wri\n");
+      break;
+    case E_LOD:  
+      printf("lod %s\n", instr->attr.name);
+      break;
+    default:
+      break;
+  }
+}
+
+void printInstrExprList(InstrList* root){
     if(root!=NULL){
-      printInstr(root->instr);
-      printInstrList(root->next);
-      
+      printInstrExpr(root->instr);
+      printInstrExprList(root->next);
     }
 }
 
-InstrList* compile(Expr* expr){
+void printInstrScanfList(InstrList* root){
+  if(root != NULL)
+  {
+    printInstrScanf(root->instr);
+    printInstrScanfList(root->next);
+  }
+}
+
+void printInstrPrintfList(InstrList* root){
+  if(root != NULL)
+  {
+    printInstrPrintf(root->instr);
+    printInstrPrintfList(root->next);
+  }
+}
+
+InstrList* compileExpr(Expr* expr){
   if(expr->kind == E_INTEGER){
     return stack_instrlist(stack_instr_ldc(expr->attr.value), NULL);
   }
@@ -48,12 +92,32 @@ InstrList* compile(Expr* expr){
       break;
   }
 
-  InstrList* instrlist = compile(expr->attr.op.left);
-  stack_instrlist_append(instrlist, compile(expr->attr.op.right));
+  InstrList* instrlist = compileExpr(expr->attr.op.left);
+  stack_instrlist_append(instrlist, compileExpr(expr->attr.op.right));
   stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));  
 
 
   return instrlist;
+}
+
+InstrList* compileScanf(CharList* charlist){
+    InstrList* instrlist1 = stack_instrlist( stack_instr_lda(charlist->value), NULL);
+    InstrList* instrlist2 = stack_instrlist( stack_instr_rdi(), NULL);
+    stack_instrlist_append( instrlist1, instrlist2);
+    
+    if(charlist->next != NULL)
+      stack_instrlist_append(instrlist1, compileScanf(charlist->next));
+    return instrlist1;
+}
+
+InstrList* compilePrintf(CharList* charlist){
+    InstrList* instrlist1 = stack_instrlist( stack_instr_lod(charlist->value), NULL);
+    InstrList* instrlist2 = stack_instrlist( stack_instr_wri(), NULL);
+    stack_instrlist_append( instrlist1, instrlist2);
+    
+    if(charlist->next != NULL)
+      stack_instrlist_append(instrlist1, compilePrintf(charlist->next));
+    return instrlist1;
 }
 
 int main(int argc, char** argv) {
@@ -68,8 +132,11 @@ int main(int argc, char** argv) {
   if (yyparse() == 0) {
 
     
-    InstrList* instr = compile(root0);
-    printInstrList(instr);
+    //InstrList* instr = compileExpr(root0);
+    //printInstrExprList(instr);
+
+    InstrList* instr = compilePrintf(root5->varList);
+    printInstrPrintfList(instr);
   }
   return 0;
 

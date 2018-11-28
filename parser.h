@@ -56,9 +56,10 @@ Expr* root0;
 BoolExpr* root1;
 Attrib* root2;
 While* root3;
+Scanf* root4;
+Printf* root5;
 
-
-#line 62 "parser.h" /* yacc.c:1919  */
+#line 63 "parser.h" /* yacc.c:1919  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -131,7 +132,7 @@ union YYSTYPE
   If* ifValue;
   Else* elseValue;
 
-#line 135 "parser.h" /* yacc.c:1919  */
+#line 136 "parser.h" /* yacc.c:1919  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -31,6 +31,31 @@ InstrList* stack_instrlist(Instr* instr, InstrList* next){
     return list;
 }
 
+Instr* stack_instr_rdi(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_RDI;
+    return node;
+}
+
+Instr* stack_instr_wri(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_WRI;
+    return node;
+}
+Instr* stack_instr_lda(char* name){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_LDA;
+    node->attr.name = name;
+    return node;
+}
+Instr* stack_instr_lod(char* name){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_LOD;
+    node->attr.name = name;
+    return node;
+}
+
+
 int isEmpty(InstrList *root){
     return !root;
 }
@@ -47,12 +72,11 @@ InstrList* stack_instrlist_tail(InstrList* list){
     return list->next;
 }
 
-InstrList* stack_instrlist_append(InstrList* instr1, InstrList* instr2){
+void stack_instrlist_append(InstrList* instr1, InstrList* instr2){
     InstrList* tmp = (InstrList*) malloc (sizeof(InstrList));
     tmp = instr1;
     while(tmp->next != NULL){
         tmp = tmp->next;
     }
     tmp->next = instr2;
-    return tmp;
 }
