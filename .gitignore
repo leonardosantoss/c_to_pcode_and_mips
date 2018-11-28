@@ -1,0 +1,3 @@
+*.o
+parser.c
+scanner.c
