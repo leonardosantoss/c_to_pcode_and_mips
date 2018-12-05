@@ -30,7 +30,8 @@ struct _Instr{
         E_NEQ,
 
         E_IOR, 
-        E_AND
+        E_AND,
+        E_LAB
     }type;
     union{
         int value;
@@ -53,11 +54,14 @@ int isEmpty(InstrList* list);
 Instr* stack_instr_ldc(int value);
 Instr* stack_instr_lod(char* name);
 Instr* stack_instr_lda(char* name);
+Instr* stack_instr_label(int label);
+Instr* stack_instr_fjp(int label);
 Instr* stack_instr_adi();
 Instr* stack_instr_mpi();
 Instr* stack_instr_sbi();
 Instr* stack_instr_wri();
 Instr* stack_instr_rdi();
+Instr* stack_instr_sto();
 
 
 InstrList* stack_instrlist(Instr* instr, InstrList* next);

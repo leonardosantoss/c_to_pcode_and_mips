@@ -3,81 +3,75 @@
 #include "stack.h"
 #include "ast.h"
 
-void printInstrExpr(Instr* instr){
-    switch(instr->type){
-      case E_LDC:
-        printf("ldc %d\n", instr->attr.value);
-        break;
-      case E_ADI:
-        printf("adi\n");
-        break;
-      case E_MPI:
-        printf("mpi\n");
-        break;
-      case E_SBI:
-        printf("sbi\n");
-        break;
-      default:
-        break;  
-    }
-}
+int labelGlobal = 0;
 
-void printInstrScanf(Instr* instr)
+InstrList* compileCmdList(CmdList* cmdlist);
+InstrList* compileCmd(Cmd* cmd);
+
+void printInstrCmd(Instr* instr)
 {
-  switch(instr->type)
-  {
+  switch(instr->type){
+    case E_LDC:
+      printf("ldc %d\n", instr->attr.value);
+      break;
+    case E_LOD:
+        printf("lod %s\n", instr->attr.name);
+      break;
     case E_LDA:
       printf("lda %s\n", instr->attr.name);
+      break;
+    case E_WRI:
+      printf("wri\n");
       break;
     case E_RDI:
       printf("rdi\n");
       break;
+    case E_ADI:
+      printf("adi\n");
+      break;
+    case E_SBI:
+      printf("sbi\n");
+      break;
+    case E_MPI:
+      printf("mpi\n");
+      break;
+    case E_DVI:
+      printf("dvi\n");
+      break;
+    case E_MOD:
+      printf("mod\n");
+      break;  
+    case E_STO:
+      printf("sto\n");
+      break; 
+    case E_FJP:
+      printf("fjp %s\n", instr->attr.name);
+      break;
+    case E_LAB:
+      printf("%s\n", instr->attr.name); 
+      break;  
     default:
       break;
   }
 }
 
-void printInstrPrintf(Instr* instr){
-  switch(instr->type){
-    case E_WRI:
-      printf("wri\n");
-      break;
-    case E_LOD:  
-      printf("lod %s\n", instr->attr.name);
-      break;
-    default:
-      break;
-  }
-}
-
-void printInstrExprList(InstrList* root){
-    if(root!=NULL){
-      printInstrExpr(root->instr);
-      printInstrExprList(root->next);
+void printInstrCmdList(InstrList* root){
+    printInstrCmd(root->instr);
+    while(root->next != NULL)
+    {
+      root = root->next;
+      printInstrCmd(root->instr);
     }
-}
-
-void printInstrScanfList(InstrList* root){
-  if(root != NULL)
-  {
-    printInstrScanf(root->instr);
-    printInstrScanfList(root->next);
-  }
-}
-
-void printInstrPrintfList(InstrList* root){
-  if(root != NULL)
-  {
-    printInstrPrintf(root->instr);
-    printInstrPrintfList(root->next);
-  }
 }
 
 InstrList* compileExpr(Expr* expr){
   if(expr->kind == E_INTEGER){
     return stack_instrlist(stack_instr_ldc(expr->attr.value), NULL);
   }
-
+  if(expr->kind == E_VAR)
+  {
+    return stack_instrlist(stack_instr_lod(expr->attr.var), NULL);
+  }
   Instr* tmp;
   switch(expr->attr.op.operator){
     
@@ -120,6 +114,85 @@ InstrList* compilePrintf(CharList* charlist){
     return instrlist1;
 }
 
+InstrList* compileAttrib(Attrib* attrib){
+    InstrList* instrlist1;
+    switch(attrib->kind){
+      case E_ATTRIBST:
+        instrlist1 = stack_instrlist(stack_instr_lda(attrib->attr.att.name), NULL);
+        stack_instrlist_append( instrlist1, compileExpr(attrib->attr.att.value));
+        stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_sto(), NULL));
+        break;
+      case E_ATTRIBCT:
+        instrlist1 = stack_instrlist(stack_instr_lda(attrib->attr.attct.name), NULL);
+        stack_instrlist_append( instrlist1, compileExpr(attrib->attr.attct.value));
+        stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_sto(), NULL));
+        break;
+      case E_NONATTRIB:
+        instrlist1 = stack_instrlist(stack_instr_lda(attrib->attr.name), NULL);
+        break;
+      default:
+        break;
+    }
+    return instrlist1;
+}
+
+InstrList* compileWhile(While* whilecmd)
+{
+  labelGlobal++;
+  int labelLocal = labelGlobal;
+  InstrList* instrlist1;
+  
+  instrlist1 = stack_instrlist(stack_instr_label(labelLocal), NULL);
+
+  stack_instrlist_append(instrlist1, compileCmdList(whilecmd->test));
+
+  switch(whilecmd->kind){
+    case E_WHILE_EXPR:
+      stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr)); 
+      break;
+    case E_WHILE_BOOLEXPR:
+      break;
+    default:
+      break;
+  }
+
+  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal), NULL)); 
+  return instrlist1;
+}
+
+InstrList* compileCmd(Cmd* cmd){
+  InstrList* instrlist1;
+  switch(cmd->kind){
+    case E_PRINTF:
+      instrlist1 = compilePrintf(cmd->type.Printf->varList);
+      break;
+    case E_SCANF:
+      instrlist1 = compileScanf(cmd->type.Scanf->varList);
+      break;
+    case E_ATTRIB:
+      instrlist1 = compileAttrib(cmd->type.Attrib);
+      break;
+    case E_WHILE:
+      instrlist1 = compileWhile(cmd->type.While);
+      break;
+    default:
+      break;  
+  }
+  return instrlist1;
+}
+
+InstrList* compileCmdList(CmdList* cmdlist){
+  InstrList* instrlist1;
+  instrlist1 = compileCmd(cmdlist->Cmd);
+
+  while(cmdlist->next != NULL){
+    cmdlist = cmdlist->next;
+    stack_instrlist_append(instrlist1, compileCmd(cmdlist->Cmd));
+  }
+
+  return instrlist1;
+}
+
 int main(int argc, char** argv) {
   --argc; ++argv;
   if (argc != 0) {
@@ -135,8 +208,11 @@ int main(int argc, char** argv) {
     //InstrList* instr = compileExpr(root0);
     //printInstrExprList(instr);
 
-    InstrList* instr = compilePrintf(root5->varList);
-    printInstrPrintfList(instr);
+    //InstrList* instr = compilePrintf(root5->varList);
+    //printInstrPrintfList(instr);
+    InstrList* instr = compileCmdList(root);
+    printInstrCmdList(instr);
+
   }
   return 0;
 

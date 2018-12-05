@@ -1,5 +1,6 @@
 #include <stdlib.h> 
 #include <stdio.h>
+#include <string.h>
 #include "stack.h" 
 
 Instr* stack_instr_ldc(int value){
@@ -42,6 +43,11 @@ Instr* stack_instr_wri(){
     node->type = E_WRI;
     return node;
 }
+Instr* stack_instr_sto(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_STO;
+    return node;
+}
 Instr* stack_instr_lda(char* name){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_LDA;
@@ -52,6 +58,33 @@ Instr* stack_instr_lod(char* name){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_LOD;
     node->attr.name = name;
+    return node;
+}
+
+Instr* stack_instr_fjp(int label){
+    char integer_string[32];
+    char s1[32];
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_FJP;
+    sprintf(integer_string, "%d", label);
+    strcpy(s1, "L");
+    strcat(s1, integer_string);
+    
+    strcpy(node->attr.name,s1);
+    
+    return node;
+}
+
+Instr* stack_instr_label(int label){
+    char integer_string[32];
+    char s1[32];
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_LAB;
+    sprintf(integer_string, "%d", label);
+    strcpy(s1, "L");
+    strcat(s1, integer_string);
+    printf("%s\n",s1);
+    strcpy(node->attr.name,s1);
     return node;
 }
 
