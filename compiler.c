@@ -47,6 +47,9 @@ void printInstrCmd(Instr* instr)
     case E_FJP:
       printf("fjp %s\n", instr->attr.name);
       break;
+    case E_UJP:
+      printf("ujp %s\n", instr->attr.name);
+      break;
     case E_LAB:
       printf("%s\n", instr->attr.name);
       break;
@@ -215,7 +218,6 @@ InstrList* compileIf(If* ifcmd)
 {
   int labelLocal1, labelLocal2;
   InstrList* instrlist1;
-
   switch(ifcmd->kind){
     case E_IF_EXPR:
       labelGlobal++;
@@ -226,6 +228,12 @@ InstrList* compileIf(If* ifcmd)
       stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
       break;
     case E_IF_BOOLEXPR:
+      labelGlobal++;
+      labelLocal1 = labelGlobal;
+      instrlist1 = compileBoolExpr(ifcmd->type.valueBoolExpr->list.type.value);
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->test));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
       break;
     case E_IFELSE_EXPR:
       labelGlobal++;
@@ -236,12 +244,24 @@ InstrList* compileIf(If* ifcmd)
       instrlist1 = compileExpr(ifcmd->type.valueExpr);
       stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal1), NULL));
       stack_instrlist_append(instrlist1, compileCmdList(ifcmd->test));
-      //stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_ujp(labelLocal2), NULL));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_ujp(labelLocal2), NULL));
       stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
       stack_instrlist_append(instrlist1, compileCmdList(ifcmd->withElse.valueElse->test));
       stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal2), NULL));
       break;
     case E_IFELSE_BOOLEXPR:
+      labelGlobal++;
+      labelLocal1 = labelGlobal;
+      labelGlobal++;
+      labelLocal2 = labelGlobal;
+
+      instrlist1 = compileBoolExpr(ifcmd->type.valueBoolExpr->list.type.value);
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->test));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_ujp(labelLocal2), NULL));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->withElse.valueElse->test));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal2), NULL));
       break;
     default:
       break;
