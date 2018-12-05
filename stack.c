@@ -1,7 +1,7 @@
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "stack.h" 
+#include "stack.h"
 
 Instr* stack_instr_ldc(int value){
     Instr* node = (Instr*) malloc(sizeof(Instr));
@@ -69,9 +69,9 @@ Instr* stack_instr_fjp(int label){
     sprintf(integer_string, "%d", label);
     strcpy(s1, "L");
     strcat(s1, integer_string);
-    
+    node->attr.name = (char*) malloc(sizeof(char));
     strcpy(node->attr.name,s1);
-    
+
     return node;
 }
 
@@ -83,7 +83,8 @@ Instr* stack_instr_label(int label){
     sprintf(integer_string, "%d", label);
     strcpy(s1, "L");
     strcat(s1, integer_string);
-    printf("%s\n",s1);
+    //printf("%s\n",s1);
+    node->attr.name = (char*) malloc(sizeof(char));
     strcpy(node->attr.name,s1);
     return node;
 }

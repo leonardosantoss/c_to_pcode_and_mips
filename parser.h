@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.1.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 97 "parser.bison" /* yacc.c:1919  */
+#line 97 "parser.bison" /* yacc.c:1909  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,7 +59,7 @@ While* root3;
 Scanf* root4;
 Printf* root5;
 
-#line 63 "parser.h" /* yacc.c:1919  */
+#line 63 "parser.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -111,7 +111,7 @@ Printf* root5;
 
 union YYSTYPE
 {
-#line 54 "parser.bison" /* yacc.c:1919  */
+#line 54 "parser.bison" /* yacc.c:1909  */
 
   int intValue;
   float floatValue;
@@ -132,7 +132,7 @@ union YYSTYPE
   If* ifValue;
   Else* elseValue;
 
-#line 136 "parser.h" /* yacc.c:1919  */
+#line 136 "parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

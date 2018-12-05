@@ -13,13 +13,13 @@ struct _Instr{
         E_RDI,
         E_WRI,
 
-        E_ADI, 
+        E_ADI,
         E_MPI,
         E_SBI,
         E_MOD,
         E_DVI,
 
-        E_UJP,  
+        E_UJP,
         E_FJP,
 
         E_EQU,
@@ -29,8 +29,6 @@ struct _Instr{
         E_LES,
         E_NEQ,
 
-        E_IOR, 
-        E_AND,
         E_LAB
     }type;
     union{
