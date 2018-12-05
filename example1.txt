@@ -1,11 +1,11 @@
 int main()
 {
-  while(1 + 2)
+  if(1)
   {
-     int a = 3 + 1;
-    b = 5 * 2 - 1;
-    int c;
-    scanf("%d", &aaa);
-    printf("%d %d", arroba, ba);
+    a = 1;
+  }
+  else
+  {
+    a = 2;
   }
 }

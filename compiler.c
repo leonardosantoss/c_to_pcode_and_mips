@@ -40,16 +40,16 @@ void printInstrCmd(Instr* instr)
       break;
     case E_MOD:
       printf("mod\n");
-      break;  
+      break;
     case E_STO:
       printf("sto\n");
-      break; 
+      break;
     case E_FJP:
       printf("fjp %s\n", instr->attr.name);
       break;
     case E_LAB:
-      printf("%s\n", instr->attr.name); 
-      break;  
+      printf("%s\n", instr->attr.name);
+      break;
     default:
       break;
   }
@@ -74,7 +74,7 @@ InstrList* compileExpr(Expr* expr){
   }
   Instr* tmp;
   switch(expr->attr.op.operator){
-    
+
     case PLUS:
       tmp =stack_instr_adi();
       break;
@@ -88,7 +88,7 @@ InstrList* compileExpr(Expr* expr){
 
   InstrList* instrlist = compileExpr(expr->attr.op.left);
   stack_instrlist_append(instrlist, compileExpr(expr->attr.op.right));
-  stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));  
+  stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));
 
 
   return instrlist;
@@ -98,7 +98,7 @@ InstrList* compileScanf(CharList* charlist){
     InstrList* instrlist1 = stack_instrlist( stack_instr_lda(charlist->value), NULL);
     InstrList* instrlist2 = stack_instrlist( stack_instr_rdi(), NULL);
     stack_instrlist_append( instrlist1, instrlist2);
-    
+
     if(charlist->next != NULL)
       stack_instrlist_append(instrlist1, compileScanf(charlist->next));
     return instrlist1;
@@ -108,7 +108,7 @@ InstrList* compilePrintf(CharList* charlist){
     InstrList* instrlist1 = stack_instrlist( stack_instr_lod(charlist->value), NULL);
     InstrList* instrlist2 = stack_instrlist( stack_instr_wri(), NULL);
     stack_instrlist_append( instrlist1, instrlist2);
-    
+
     if(charlist->next != NULL)
       stack_instrlist_append(instrlist1, compilePrintf(charlist->next));
     return instrlist1;
@@ -141,14 +141,14 @@ InstrList* compileWhile(While* whilecmd)
   labelGlobal++;
   int labelLocal = labelGlobal;
   InstrList* instrlist1;
-  
+
   instrlist1 = stack_instrlist(stack_instr_label(labelLocal), NULL);
 
   stack_instrlist_append(instrlist1, compileCmdList(whilecmd->test));
 
   switch(whilecmd->kind){
     case E_WHILE_EXPR:
-      stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr)); 
+      stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr));
       break;
     case E_WHILE_BOOLEXPR:
       break;
@@ -156,8 +156,45 @@ InstrList* compileWhile(While* whilecmd)
       break;
   }
 
-  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal), NULL)); 
+  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal), NULL));
   return instrlist1;
+}
+
+InstrList* compileIf(If* ifcmd)
+{
+  int labelLocal1, labelLocal2;
+  InstrList* instrlist1;
+
+  switch(ifcmd->kind){
+    case E_IF_EXPR:
+      labelGlobal++;
+      labelLocal1 = labelGlobal;
+      instrlist1 = compileExpr(ifcmd->type.valueExpr);
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->test));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
+      break;
+    case E_IF_BOOLEXPR:
+      break;
+    case E_IFELSE_EXPR:
+      labelGlobal++;
+      labelLocal1 = labelGlobal;
+      labelGlobal++;
+      labelLocal2 = labelGlobal;
+
+      instrlist1 = compileExpr(ifcmd->type.valueExpr);
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->test));
+      //stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_ujp(labelLocal2), NULL));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal1), NULL));
+      stack_instrlist_append(instrlist1, compileCmdList(ifcmd->withElse.valueElse->test));
+      stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal2), NULL));
+      break;
+    case E_IFELSE_BOOLEXPR:
+      break;
+    default:
+      break;
+  }
 }
 
 InstrList* compileCmd(Cmd* cmd){
@@ -175,8 +212,10 @@ InstrList* compileCmd(Cmd* cmd){
     case E_WHILE:
       instrlist1 = compileWhile(cmd->type.While);
       break;
+    case E_IF:
+      instrlist1 = compileIf(cmd->type.If);
     default:
-      break;  
+      break;
   }
   return instrlist1;
 }
@@ -204,7 +243,7 @@ int main(int argc, char** argv) {
   } //  yyin = stdin
   if (yyparse() == 0) {
 
-    
+
     //InstrList* instr = compileExpr(root0);
     //printInstrExprList(instr);
 
