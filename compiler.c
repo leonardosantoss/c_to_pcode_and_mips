@@ -63,10 +63,10 @@ void printInstrCmd(Instr* instr)
       printf("equ\n");
       break;
     case E_LEQ:
-      printf("leq");
+      printf("leq\n");
       break;
     case E_LES:
-      printf("les");
+      printf("les\n");
       break;
     default:
       break;
