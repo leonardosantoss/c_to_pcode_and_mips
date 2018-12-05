@@ -48,14 +48,14 @@ void printInstrCmd(Instr* instr)
       printf("fjp %s\n", instr->attr.name);
       break;
     case E_LAB:
-      printf("%s\n", instr->attr.name); 
-      break; 
+      printf("%s\n", instr->attr.name);
+      break;
     case E_GEQ:
       printf("geq\n");
       break;
     case E_GES:
       printf("ges\n");
-      break; 
+      break;
     case E_EQU:
       printf("equ\n");
       break;
@@ -64,7 +64,7 @@ void printInstrCmd(Instr* instr)
       break;
     case E_LES:
       printf("les");
-      break;       
+      break;
     default:
       break;
   }
@@ -129,15 +129,15 @@ InstrList* compileBoolExpr(BoolExpr* boolexpr){
         tmp = stack_instr_les();
         break;
       case EQUALS:
-        tmp = stack_instr_equ();  
+        tmp = stack_instr_equ();
       default:
-        break;    
-   } 
+        break;
+   }
   }
 
   InstrList* instrlist = compileExpr(boolexpr->attr.op.left);
   stack_instrlist_append(instrlist, compileExpr(boolexpr->attr.op.right));
-  stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));  
+  stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));
 
 
   return instrlist;
@@ -201,7 +201,7 @@ InstrList* compileWhile(While* whilecmd)
       stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr));
       break;
     case E_WHILE_BOOLEXPR:
-      stack_instrlist_append(instrlist1, compileBoolExpr(whilecmd->type.valueBoolExpr->list.type.value)); 
+      stack_instrlist_append(instrlist1, compileBoolExpr(whilecmd->type.valueBoolExpr->list.type.value));
       break;
     default:
       break;
@@ -246,6 +246,8 @@ InstrList* compileIf(If* ifcmd)
     default:
       break;
   }
+
+  return instrlist1;
 }
 
 InstrList* compileCmd(Cmd* cmd){
