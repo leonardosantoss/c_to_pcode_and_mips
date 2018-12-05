@@ -100,6 +100,20 @@ Instr* stack_instr_fjp(int label){
     return node;
 }
 
+Instr* stack_instr_ujp(int label){
+    char integer_string[32];
+    char s1[32];
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_UJP;
+    sprintf(integer_string, "%d", label);
+    strcpy(s1, "L");
+    strcat(s1, integer_string);
+    node->attr.name = (char*) malloc(sizeof(char));
+    strcpy(node->attr.name,s1);
+
+    return node;
+}
+
 Instr* stack_instr_label(int label){
     char integer_string[32];
     char s1[32];

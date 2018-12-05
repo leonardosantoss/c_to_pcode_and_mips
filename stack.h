@@ -54,6 +54,7 @@ Instr* stack_instr_lod(char* name);
 Instr* stack_instr_lda(char* name);
 Instr* stack_instr_label(int label);
 Instr* stack_instr_fjp(int label);
+Instr* stack_instr_ujp(int label);
 Instr* stack_instr_adi();
 Instr* stack_instr_mpi();
 Instr* stack_instr_sbi();
