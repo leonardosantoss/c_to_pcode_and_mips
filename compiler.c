@@ -49,7 +49,22 @@ void printInstrCmd(Instr* instr)
       break;
     case E_LAB:
       printf("%s\n", instr->attr.name); 
-      break;  
+      break; 
+    case E_GEQ:
+      printf("geq\n");
+      break;
+    case E_GES:
+      printf("ges\n");
+      break; 
+    case E_EQU:
+      printf("equ\n");
+      break;
+    case E_LEQ:
+      printf("leq");
+      break;
+    case E_LES:
+      printf("les");
+      break;       
     default:
       break;
   }
@@ -93,6 +108,41 @@ InstrList* compileExpr(Expr* expr){
 
   return instrlist;
 }
+
+InstrList* compileBoolExpr(BoolExpr* boolexpr){
+  Instr* tmp;
+  if(boolexpr->kind == E_BOOL){
+    return compileExpr(boolexpr->attr.value);
+  }
+  if(boolexpr->kind == E_BOOLOPERATION){
+    switch(boolexpr->attr.op.operator){
+      case GREATER:
+        tmp =stack_instr_ges();
+        break;
+      case GREATERTHAN:
+        tmp =stack_instr_geq();
+        break;
+      case LESSTHAN:
+        tmp = stack_instr_leq();
+        break;
+      case LESS:
+        tmp = stack_instr_les();
+        break;
+      case EQUALS:
+        tmp = stack_instr_equ();  
+      default:
+        break;    
+   } 
+  }
+
+  InstrList* instrlist = compileExpr(boolexpr->attr.op.left);
+  stack_instrlist_append(instrlist, compileExpr(boolexpr->attr.op.right));
+  stack_instrlist_append(instrlist, stack_instrlist(tmp, NULL));  
+
+
+  return instrlist;
+}
+
 
 InstrList* compileScanf(CharList* charlist){
     InstrList* instrlist1 = stack_instrlist( stack_instr_lda(charlist->value), NULL);
@@ -151,6 +201,7 @@ InstrList* compileWhile(While* whilecmd)
       stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr)); 
       break;
     case E_WHILE_BOOLEXPR:
+      stack_instrlist_append(instrlist1, compileBoolExpr(whilecmd->type.valueBoolExpr->list.type.value)); 
       break;
     default:
       break;

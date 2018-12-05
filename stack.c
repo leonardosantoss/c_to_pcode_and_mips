@@ -19,6 +19,31 @@ Instr* stack_instr_mpi(){
     node->type = E_MPI;
     return node;
 }
+Instr* stack_instr_ges(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_GES;
+    return node;
+}
+Instr* stack_instr_geq(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_GEQ;
+    return node;
+}
+Instr* stack_instr_equ(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_EQU;
+    return node;
+}
+Instr* stack_instr_les(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_LES;
+    return node;
+}
+Instr* stack_instr_leq(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_LEQ;
+    return node;
+}
 Instr* stack_instr_sbi(){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_SBI;

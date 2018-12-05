@@ -60,6 +60,11 @@ Instr* stack_instr_sbi();
 Instr* stack_instr_wri();
 Instr* stack_instr_rdi();
 Instr* stack_instr_sto();
+Instr* stack_instr_geq();
+Instr* stack_instr_ges();
+Instr* stack_instr_equ();
+Instr* stack_instr_leq();
+Instr* stack_instr_les();
 
 
 InstrList* stack_instrlist(Instr* instr, InstrList* next);

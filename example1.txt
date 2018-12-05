@@ -1,11 +1,14 @@
 int main()
 {
-  while(1 + 2)
+  while(1 == 2)
   {
-     int a = 3 + 1;
-    b = 5 * 2 - 1;
-    int c;
-    scanf("%d", &aaa);
-    printf("%d %d", arroba, ba);
+    a = 2;
+    x = 7;
+  }
+
+   while(3 >= 4)
+  {
+    c = 8;
+    d = 9;
   }
 }
