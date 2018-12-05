@@ -1,3 +1,9 @@
-*.o
+ast.o
+compiler.o
+interpreter.o
+interpreter
+parser.o
+scanner.o
+stack.o
 parser.c
 scanner.c
