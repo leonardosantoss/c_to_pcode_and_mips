@@ -3,6 +3,8 @@
 #include "stack.h"
 #include "ast.h"
 
+#define VARNAME instrlist->instr->attr
+
 int labelGlobal = 0;
 
 InstrList* compileCmdList(CmdList* cmdlist);
@@ -313,15 +315,15 @@ InstrList* compileCmdList(CmdList* cmdlist){
 void printData(InstrList* instrlist){
 
     printf(".data\n");
-    
+
     while(instrlist->next != NULL)
     {
       switch(instrlist->instr->type){
         case E_INT:
-          printf("%s: .space 4\n", instrlist->instr->attr.name);
+          printf("\t%s: .space 4\n",  VARNAME.name);
           break;
         default:
-          break;  
+          break;
       }
       instrlist = instrlist->next;
     }
@@ -330,16 +332,75 @@ void printData(InstrList* instrlist){
   return;
 }
 
+void addStack()
+{
+  printf("\taddi $sp, $sp, -4\n");
+  printf("\tsw $t0, 0($sp)\n");
+}
+
+void removeStack(char *name)
+{
+  printf("\tlw %s, 0($sp)\n", name);
+  printf("\taddi $sp, $sp, 4\n");
+}
+
 void printText(InstrList* instrlist)
 {
-
     printf(".text\n");
-    
+
     while(instrlist->next != NULL)
     {
       switch(instrlist->instr->type){
+        case E_LDC:
+          printf("\tli $t0, %d\n",  VARNAME.value);
+          addStack();
+          break;
+        case E_LDA:
+          printf("\tla $t0, %s\n", VARNAME.name);
+          addStack();
+          break;
+        case E_LOD:
+          printf("\tlw $t0, %s\n", VARNAME.name);
+          addStack();
+          break;
+        case E_ADI:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tadd $t0, $t0, $t1\n");
+          addStack();
+          break;
+        case E_SBI:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tsub $t0, $t0, $t1\n");
+          addStack();
+          break;
+        case E_DVI:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tdiv $t0, $t1\n");
+          printf("\tmove $t0, $LO\n");
+          addStack();
+          break;
+        case E_MPI:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tmult $t0, $t1\n");
+          printf("\tmflo $t0\n");
+          addStack();
+          break;
+        case E_STO:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tsw $t1, 0($t0)\n");
+          break;
+        case E_LAB:
+          printf("%s:\n", VARNAME.name);
+          break;
+        case E_INT:
+          break;
         default:
-          break;  
+          break;
       }
       instrlist = instrlist->next;
     }

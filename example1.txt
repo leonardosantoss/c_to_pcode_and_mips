@@ -1,26 +1,4 @@
 int main()
 {
-  int a;
-  int b = 1 + 2;
-  c = 2;
-  scanf("%d", &a);
-  scanf("%d %d", &b, &c);
-
-  if(1 > 2)
-  {
-    while( 1 >= 2 + 1)
-    {
-      printf("%d", x);
-    }
-  }
-  else
-  {
-    a = 2;
-  }
-
-  while(1 < x)
-  {
-    x = x + 1;
-  }
-  printf("%d", c);
+  int x = 2 * 3;
 }
