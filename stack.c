@@ -57,20 +57,6 @@ InstrList* stack_instrlist(Instr* instr, InstrList* next){
     return list;
 }
 
-TextList* stack_textlist(Text* text, TextList* next){
-    TextList* list = (TextList*) malloc(sizeof(TextList));
-    list->text = text;
-    list->next = next;
-    return list;
-}
-
-DataList* stack_datalist(Data* data, DataList* next){
-    DataList* list = (DataList*) malloc(sizeof(DataList));
-    list->data = data;
-    list->next = next;
-    return list;
-}
-
 Instr* stack_instr_rdi(){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_RDI;
@@ -173,22 +159,4 @@ void stack_instrlist_append(InstrList* instr1, InstrList* instr2){
         tmp = tmp->next;
     }
     tmp->next = instr2;
-}
-
-void stack_textlist_append(TextList* text1, TextList* text2){
-    TextList* tmp = (TextList*) malloc (sizeof(TextList));
-    tmp = text1;
-    while(tmp->next != NULL){
-        tmp = tmp->next;
-    }
-    tmp->next = text2;
-}
-
-void stack_datalist_append(DataList* data1, DataList* data2){
-    DataList* tmp = (DataList*) malloc (sizeof(DataList));
-    tmp = data1;
-    while(tmp->next != NULL){
-        tmp = tmp->next;
-    }
-    tmp->next = data2;
 }

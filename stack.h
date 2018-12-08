@@ -44,38 +44,8 @@ struct _InstrList{
     struct _InstrList* next;
 };
 
-struct _Data{
-  char* name;
-};
-
-struct _DataList{
-  struct _Data* data;
-  struct _DataList* next;
-};
-
-struct _Text{
-  enum{
-    E_LW,
-    E_SW
-  }
-
-  union{
-    char* name;
-  }attr;
-};
-
-struct _TextList{
-  struct _Text* text;
-  struct _TextList* next;
-};
-
 typedef struct _Instr Instr;
 typedef struct _InstrList InstrList;
-
-typedef struct _Data Data;
-typedef struct _DataList DataList;
-typedef struct _Text Text;
-typedef struct _TextList TextList;
 
 int isEmpty(InstrList* list);
 
@@ -104,11 +74,5 @@ InstrList* stack_instrlist(Instr* instr, InstrList* next);
 Instr* stack_instrlist_head(InstrList* list);
 InstrList* stack_instrlist_tail(InstrList* list);
 void stack_instrlist_append(InstrList* list1, InstrList* list2);
-
-TextList* stack_textlist(Text* text, TextList* next);
-void stack_textlist_append(TextList* text1, TextList* text2);
-
-DataList* stack_datalist(Data* data, DataList* next);
-void stack_datalist_append(DataList* data1, DataList* data2);
 
 #endif

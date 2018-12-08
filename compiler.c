@@ -310,6 +310,16 @@ InstrList* compileCmdList(CmdList* cmdlist){
   return instrlist1;
 }
 
+void printData(InstrList* instrlist)
+{
+  return;
+}
+
+void printText(InstrList* instrlist)
+{
+  return;
+}
+
 int main(int argc, char** argv) {
   --argc; ++argv;
   if (argc != 0) {
@@ -330,6 +340,8 @@ int main(int argc, char** argv) {
     InstrList* instr = compileCmdList(root);
     printInstrCmdList(instr);
 
+    printData(instr);
+    printText(instr);
   }
   return 0;
 
