@@ -20,6 +20,9 @@ void printInstrCmd(Instr* instr)
     case E_LDA:
       printf("lda %s\n", instr->attr.name);
       break;
+    case E_INT:
+      printf("var %s\n", instr->attr.name);
+      break;
     case E_WRI:
       printf("wri\n");
       break;
@@ -176,12 +179,14 @@ InstrList* compileAttrib(Attrib* attrib){
         stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_sto(), NULL));
         break;
       case E_ATTRIBCT:
-        instrlist1 = stack_instrlist(stack_instr_lda(attrib->attr.attct.name), NULL);
+        instrlist1 = stack_instrlist(stack_instr_var(attrib->attr.attct.name), NULL);
+        stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_lda(attrib->attr.attct.name), NULL));
         stack_instrlist_append( instrlist1, compileExpr(attrib->attr.attct.value));
         stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_sto(), NULL));
         break;
       case E_NONATTRIB:
-        instrlist1 = stack_instrlist(stack_instr_lda(attrib->attr.name), NULL);
+        instrlist1 = stack_instrlist(stack_instr_var(attrib->attr.name), NULL);
+        stack_instrlist_append( instrlist1, stack_instrlist(stack_instr_lda(attrib->attr.name), NULL));
         break;
       default:
         break;

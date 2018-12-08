@@ -86,6 +86,13 @@ Instr* stack_instr_lod(char* name){
     return node;
 }
 
+Instr* stack_instr_var(char* name){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_INT;
+    node->attr.name = name;
+    return node;
+}
+
 Instr* stack_instr_fjp(int label){
     char integer_string[32];
     char s1[32];

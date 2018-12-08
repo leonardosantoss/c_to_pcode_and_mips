@@ -1,5 +1,8 @@
 int main()
 {
+  int a;
+  int b = 1 + 2;
+  c = 2;
   scanf("%d", &a);
   scanf("%d %d", &b, &c);
 
