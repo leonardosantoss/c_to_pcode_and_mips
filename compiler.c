@@ -310,13 +310,40 @@ InstrList* compileCmdList(CmdList* cmdlist){
   return instrlist1;
 }
 
-void printData(InstrList* instrlist)
-{
+void printData(InstrList* instrlist){
+
+    printf(".data\n");
+    
+    while(instrlist->next != NULL)
+    {
+      switch(instrlist->instr->type){
+        case E_INT:
+          printf("%s: .space 4\n", instrlist->instr->attr.name);
+          break;
+        default:
+          break;  
+      }
+      instrlist = instrlist->next;
+    }
+
+
   return;
 }
 
 void printText(InstrList* instrlist)
 {
+
+    printf(".text\n");
+    
+    while(instrlist->next != NULL)
+    {
+      switch(instrlist->instr->type){
+        default:
+          break;  
+      }
+      instrlist = instrlist->next;
+    }
+
   return;
 }
 

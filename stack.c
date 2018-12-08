@@ -89,7 +89,7 @@ Instr* stack_instr_lod(char* name){
 Instr* stack_instr_var(char* name){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_INT;
-    node->attr.name = name;text
+    node->attr.name = name;
     return node;
 }
 
