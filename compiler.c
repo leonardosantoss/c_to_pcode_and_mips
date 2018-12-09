@@ -153,7 +153,7 @@ InstrList* compileBoolExpr(BoolExpr* boolexpr){
 
 
 InstrList* compileScanf(CharList* charlist){
-    InstrList* instrlist1 = stack_instrlist( stack_instr_lda(charlist->value), NULL);
+    InstrList* instrlist1 = stack_instrlist( stack_instr_lda(charlist->value+1), NULL);
     InstrList* instrlist2 = stack_instrlist( stack_instr_rdi(), NULL);
     stack_instrlist_append( instrlist1, instrlist2);
 
@@ -316,7 +316,7 @@ void printData(InstrList* instrlist){
 
     printf(".data\n");
 
-    while(instrlist->next != NULL)
+    while(instrlist != NULL)
     {
       switch(instrlist->instr->type){
         case E_INT:
@@ -348,7 +348,7 @@ void printText(InstrList* instrlist)
 {
     printf(".text\n");
 
-    while(instrlist->next != NULL)
+    while(instrlist != NULL)
     {
       switch(instrlist->instr->type){
         case E_LDC:
@@ -379,7 +379,7 @@ void printText(InstrList* instrlist)
           removeStack("$t1");
           removeStack("$t0");
           printf("\tdiv $t0, $t1\n");
-          printf("\tmove $t0, $LO\n");
+          printf("\tmflo $t0\n");
           addStack();
           break;
         case E_MPI:
@@ -394,6 +394,54 @@ void printText(InstrList* instrlist)
           removeStack("$t0");
           printf("\tsw $t1, 0($t0)\n");
           break;
+        case E_RDI:
+          printf("\tli $v0, 5\n");
+          printf("\tsyscall\n");
+          printf("\tmove $t1, $v0\n");
+          removeStack("$t0");
+          printf("\tsw $t1, 0($t0)\n");
+          break;
+        case E_WRI:
+          removeStack("$t0");
+          printf("\tmove $a0, $t0\n");
+          printf("\tli $v0, 1\n");
+          printf("\tsyscall\n");
+          break;
+        case E_EQU:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBNE $t0, $t1, ");
+          break;
+        case E_GEQ:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBLT $t0, $t1, ");
+          break;
+        case E_GES:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBLE $t0, $t1, ");
+          break;
+        case E_LEQ:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBGT $t0, $t1, ");
+          break;
+        case E_LES:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBGE $t0, $t1, ");
+          break;
+        case E_NEQ:
+          removeStack("$t1");
+          removeStack("$t0");
+          printf("\tBEQ $t0, $t1, ");
+          break;
+        case E_FJP:
+          printf("%s\n", VARNAME.name);
+          break;
+        case E_UJP:
+          printf("\tj %s\n", VARNAME.name);
         case E_LAB:
           printf("%s:\n", VARNAME.name);
           break;
