@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 97 "parser.bison" /* yacc.c:1909  */
+#line 98 "parser.bison" /* yacc.c:1909  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,30 +79,31 @@ Printf* root5;
     LESSTHAN = 268,
     GREATERTHAN = 269,
     EQUALS = 270,
-    T_FLOAT = 271,
-    T_INT = 272,
-    T_MAIN = 273,
-    T_FOR = 274,
-    T_WHILE = 275,
-    T_SCANF = 276,
-    T_PRINTF = 277,
-    T_IF = 278,
-    T_ELSE = 279,
-    T_OPENCURLYBRACKET = 280,
-    T_CLOSECURLYBRACKET = 281,
-    T_OPENPARENTESES = 282,
-    T_CLOSEPARENTESES = 283,
-    T_SEMICOLON = 284,
-    T_COMMA = 285,
-    T_AND = 286,
-    T_OR = 287,
-    T_NOT = 288,
-    T_INCREMENT = 289,
-    T_DECREMENT = 290,
-    NAME = 291,
-    NAME2 = 292,
-    EQUALSIGN = 293,
-    STRING = 294
+    NEQUALS = 271,
+    T_FLOAT = 272,
+    T_INT = 273,
+    T_MAIN = 274,
+    T_FOR = 275,
+    T_WHILE = 276,
+    T_SCANF = 277,
+    T_PRINTF = 278,
+    T_IF = 279,
+    T_ELSE = 280,
+    T_OPENCURLYBRACKET = 281,
+    T_CLOSECURLYBRACKET = 282,
+    T_OPENPARENTESES = 283,
+    T_CLOSEPARENTESES = 284,
+    T_SEMICOLON = 285,
+    T_COMMA = 286,
+    T_AND = 287,
+    T_OR = 288,
+    T_NOT = 289,
+    T_INCREMENT = 290,
+    T_DECREMENT = 291,
+    NAME = 292,
+    NAME2 = 293,
+    EQUALSIGN = 294,
+    STRING = 295
   };
 #endif
 
@@ -111,7 +112,7 @@ Printf* root5;
 
 union YYSTYPE
 {
-#line 54 "parser.bison" /* yacc.c:1909  */
+#line 55 "parser.bison" /* yacc.c:1909  */
 
   int intValue;
   float floatValue;
@@ -132,7 +133,7 @@ union YYSTYPE
   If* ifValue;
   Else* elseValue;
 
-#line 136 "parser.h" /* yacc.c:1909  */
+#line 137 "parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

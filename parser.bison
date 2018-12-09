@@ -13,6 +13,7 @@
   LESSTHAN
   GREATERTHAN
   EQUALS
+  NEQUALS
   T_FLOAT
   T_INT
   T_MAIN
@@ -41,7 +42,7 @@
 // Operator associativity & precedence
 //so pus aqui as tokens todas ainda nao tem as precedencias corretas
 %left T_MAIN T_FOR T_WHILE T_SCANF T_PRINTF T_IF T_ELSE T_OPENCURLYBRACKET T_CLOSECURLYBRACKET T_OPENPARENTESES T_CLOSEPARENTESES T_SEMICOLON T_COMMA T_AND T_OR T_NOT T_INCREMENT T_DECREMENT NAME NAME2 STRING
-%left GREATER GREATERTHAN LESS LESSTHAN EQUALS EQUALSIGN
+%left GREATER GREATERTHAN LESS LESSTHAN EQUALS EQUALSIGN NEQUALS
 %left PLUS MINUS
 %left DIV MULT MOD
 %left T_FLOAT T_INT
@@ -240,6 +241,10 @@ boolexpr:
    expr EQUALS expr {
     $$ = ast_boolean_expr(EQUALS, $1, $3);
   }
+  |
+   expr NEQUALS expr {
+    $$ = ast_boolean_expr(NEQUALS, $1, $3);
+  }
 ;
 
 boolexprlist:
@@ -268,7 +273,7 @@ boolexprlist:
     $$ = ast_expr_exprList_or($1, $3);
   }
   |
-  expr 
+  expr
   {
     $$ = ast_expr_exprList_solo($1, NULL);
   }

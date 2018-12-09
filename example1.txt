@@ -1,15 +1,19 @@
-int main()
-{
-  int a;
-  scanf("%d", &a);
-  if(a > 2)
-  {
-    a = a + 2;
-    printf("%d", a);
-  }
-  else
-  {
-    a = a + 5;
-    printf("%d", a);
-  }
-}
+                        int main()
+                        {
+                          int a;
+                          scanf("%d", &a);
+                          while(a <= 10000)
+                          {
+                            if(a > 2)
+                            {
+                              a = a + 2;
+                              printf("%d", a);
+                            }
+                            else
+                            {
+                              a = a + 5;
+                              printf("%d", a);
+                            }
+                            scanf("%d", &a);
+                          }
+                        }

@@ -73,6 +73,9 @@ void printInstrCmd(Instr* instr)
     case E_LES:
       printf("les\n");
       break;
+    case E_NEQ:
+    printf("neq\n");
+    break;
     default:
       break;
   }
@@ -442,6 +445,7 @@ void printText(InstrList* instrlist)
           break;
         case E_UJP:
           printf("\tj %s\n", VARNAME.name);
+          break;
         case E_LAB:
           printf("%s:\n", VARNAME.name);
           break;

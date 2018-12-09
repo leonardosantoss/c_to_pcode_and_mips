@@ -30,6 +30,7 @@ int yyline = 1;
 ">=" { return GREATERTHAN; }
 "<=" { return LESSTHAN; }
 "==" { return EQUALS; }
+"!=" { return NEQUALS; }
 "int" { return T_INT; }
 "float" { return T_FLOAT; }
 "=" { return EQUALSIGN; }
