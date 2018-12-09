@@ -142,7 +142,7 @@ InstrList* compileBoolExpr(BoolExpr* boolexpr){
       case EQUALS:
         tmp = stack_instr_equ();
       case NEQUALS:
-        tmp = stack_instr_neq();  
+        tmp = stack_instr_neq();
       default:
         break;
    }
@@ -204,13 +204,12 @@ InstrList* compileAttrib(Attrib* attrib){
 InstrList* compileWhile(While* whilecmd)
 {
   labelGlobal++;
-  int labelLocal = labelGlobal;
+  int labelLocal1 = labelGlobal;
+  labelGlobal++;
+  int labelLocal2 = labelGlobal;
   InstrList* instrlist1;
 
-  instrlist1 = stack_instrlist(stack_instr_label(labelLocal), NULL);
-
-  stack_instrlist_append(instrlist1, compileCmdList(whilecmd->test));
-
+  instrlist1 = stack_instrlist(stack_instr_label(labelLocal1), NULL);
   switch(whilecmd->kind){
     case E_WHILE_EXPR:
       stack_instrlist_append(instrlist1, compileExpr(whilecmd->type.valueExpr));
@@ -222,7 +221,12 @@ InstrList* compileWhile(While* whilecmd)
       break;
   }
 
-  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal), NULL));
+  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_fjp(labelLocal2), NULL));
+
+  stack_instrlist_append(instrlist1, compileCmdList(whilecmd->test));
+  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_ujp(labelLocal1), NULL));
+  stack_instrlist_append(instrlist1, stack_instrlist(stack_instr_label(labelLocal2), NULL));
+
   return instrlist1;
 }
 
@@ -349,6 +353,13 @@ void removeStack(char *name)
   printf("\taddi $sp, $sp, 4\n");
 }
 
+void printNewLine()
+{
+  printf("\taddi $a0, $0, 0xA\n");
+  printf("\taddi $v0, $0, 0xB\n");
+  printf("\tsyscall\n");
+}
+
 void printText(InstrList* instrlist)
 {
     printf(".text\n");
@@ -411,6 +422,7 @@ void printText(InstrList* instrlist)
           printf("\tmove $a0, $t0\n");
           printf("\tli $v0, 1\n");
           printf("\tsyscall\n");
+          printNewLine();
           break;
         case E_EQU:
           removeStack("$t1");
@@ -479,9 +491,11 @@ int main(int argc, char** argv) {
 
     //InstrList* instr = compilePrintf(root5->varList);
     //printInstrPrintfList(instr);
+    printf("==========CODIGO P-CODE===========\n\n");
     InstrList* instr = compileCmdList(root);
     printInstrCmdList(instr);
 
+    printf("\n\n==========CODIGO MIPS===========\n\n");
     printData(instr);
     printText(instr);
   }
