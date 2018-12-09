@@ -67,6 +67,7 @@ Instr* stack_instr_ges();
 Instr* stack_instr_equ();
 Instr* stack_instr_leq();
 Instr* stack_instr_les();
+Instr* stack_instr_neq();
 
 
 InstrList* stack_instrlist(Instr* instr, InstrList* next);

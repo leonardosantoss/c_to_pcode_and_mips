@@ -74,8 +74,8 @@ void printInstrCmd(Instr* instr)
       printf("les\n");
       break;
     case E_NEQ:
-    printf("neq\n");
-    break;
+      printf("neq\n");
+      break;
     default:
       break;
   }
@@ -141,6 +141,8 @@ InstrList* compileBoolExpr(BoolExpr* boolexpr){
         break;
       case EQUALS:
         tmp = stack_instr_equ();
+      case NEQUALS:
+        tmp = stack_instr_neq();  
       default:
         break;
    }

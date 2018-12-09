@@ -44,6 +44,11 @@ Instr* stack_instr_leq(){
     node->type = E_LEQ;
     return node;
 }
+Instr* stack_instr_neq(){
+    Instr* node = (Instr*) malloc(sizeof(Instr));
+    node->type = E_NEQ;
+    return node;
+}
 Instr* stack_instr_sbi(){
     Instr* node = (Instr*) malloc(sizeof(Instr));
     node->type = E_SBI;

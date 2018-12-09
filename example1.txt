@@ -2,7 +2,7 @@
                         {
                           int a;
                           scanf("%d", &a);
-                          while(a <= 10000)
+                          while(a != 10000)
                           {
                             if(a > 2)
                             {
